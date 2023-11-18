@@ -8,6 +8,7 @@ router.get("/categories", posController.getCategories);
 router.post("/category", posController.postCategory);
 
 router.get("/items", posController.getItems);
+router.get("/items/:catId", posController.getItemsByCategory);
 
 router.get("/item/:itemId", posController.getItem);
 

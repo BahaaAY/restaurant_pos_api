@@ -41,6 +41,25 @@ exports.getItems = async (req, res, next) => {
   }
 };
 
+exports.getItemsByCategory = async (req, res, next) => {
+  const catId = req.params.catId;
+  try {
+    const items = await Item.findAll({
+      where: {
+        categoryId: catId,
+      },
+      include: [
+        {
+          model: Category,
+        },
+      ],
+    });
+    res.status(200).json({ items: items });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.getItem = async (req, res, next) => {
   const itemId = req.params.itemId;
   try {
