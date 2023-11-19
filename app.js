@@ -1,4 +1,5 @@
 const express = require("express");
+const cors = require("cors");
 const bodyParser = require("body-parser");
 
 const database = require("./util/database");
@@ -11,14 +12,12 @@ const ItemVariant = require("./models/item_variant");
 
 const app = express();
 
+app.use(cors((origin = "http://192.168.1.21:7357"), (credentials = true)));
 app.use((req, res, next) => {
-  // Fix CORS error
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type,Authorization");
+  console.log("Middleware");
+  console.log(req.method);
   next();
 });
-
 app.use(bodyParser.json());
 
 app.use("/pos", posRoutes);

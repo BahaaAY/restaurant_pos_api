@@ -14,7 +14,7 @@ const Item = database.define("item", {
     allowNull: false,
   },
   item_price: {
-    type: Sequelize.INTEGER,
+    type: Sequelize.DOUBLE,
     allowNull: false,
   },
 });
