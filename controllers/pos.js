@@ -26,6 +26,20 @@ exports.postCategory = async (req, res, next) => {
   }
 };
 
+exports.deleteCategory = async (req, res, next) => {
+  const catId = req.params.catId;
+  try {
+    const category = await Category.findByPk(catId);
+    if (!category) {
+      return res.status(404).json({ message: "Category not found" });
+    }
+    await category.destroy();
+    res.status(200).json({ message: "Category deleted" });
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 exports.getItems = async (req, res, next) => {
   try {
     const items = await Item.findAll({

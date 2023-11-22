@@ -22,8 +22,8 @@ app.use(bodyParser.json());
 
 app.use("/pos", posRoutes);
 
-Category.hasMany(Item);
-Item.belongsTo(Category, { constraints: true, onDelete: "CASCADE" });
+Category.hasMany(Item,{onDelete: 'cascade', hooks: true});
+Item.belongsTo(Category, );
 
 database.sync().then(() => {
   console.log("Database synced");

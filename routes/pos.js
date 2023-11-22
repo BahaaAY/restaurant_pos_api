@@ -6,6 +6,7 @@ const posController = require("../controllers/pos");
 router.get("/categories", posController.getCategories);
 
 router.post("/category", posController.postCategory);
+router.delete("/category/:catId", posController.deleteCategory);
 
 router.get("/items", posController.getItems);
 router.get("/items/:catId", posController.getItemsByCategory);
