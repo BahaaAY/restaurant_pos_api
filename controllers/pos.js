@@ -39,6 +39,17 @@ exports.deleteCategory = async (req, res, next) => {
     console.log(err);
   }
 };
+exports.updateCategory = async (req, res, next) => {
+  const catId = req.params.catId;
+  const category_name = req.body.category_name;
+  const category = await Category.findByPk(catId);
+  if (!category) {
+    return res.status(404).json({ message: "Category not found" });
+  }
+  category.category_name = category_name;
+  await category.save();
+  return res.status(200).json({ message: "Category updated", category: category });
+};
 
 exports.getItems = async (req, res, next) => {
   try {

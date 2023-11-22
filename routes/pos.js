@@ -7,6 +7,7 @@ router.get("/categories", posController.getCategories);
 
 router.post("/category", posController.postCategory);
 router.delete("/category/:catId", posController.deleteCategory);
+router.patch("/category/:catId", posController.updateCategory);
 
 router.get("/items", posController.getItems);
 router.get("/items/:catId", posController.getItemsByCategory);
