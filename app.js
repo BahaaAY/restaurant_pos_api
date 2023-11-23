@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const database = require("./util/database");
 
 const posRoutes = require("./routes/pos");
+const salesRoutes = require("./routes/sales");
 
 const Item = require("./models/item");
 const Category = require("./models/category");
@@ -23,6 +24,7 @@ app.use((req, res, next) => {
 app.use(bodyParser.json());
 
 app.use("/pos", posRoutes);
+app.use("/sales", salesRoutes);
 
 Category.hasMany(Item,{onDelete: 'cascade', hooks: true});
 Item.belongsTo(Category, );
