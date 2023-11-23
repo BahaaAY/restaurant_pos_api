@@ -20,4 +20,6 @@ router.delete("/item/:itemId", posController.deleteItem);
 
 router.patch("/item/:itemId", posController.updateItem);
 
+router.post("/order", posController.postOrder);
+
 module.exports = router;

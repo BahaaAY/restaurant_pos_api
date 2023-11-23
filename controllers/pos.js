@@ -3,6 +3,8 @@ const Sequelize = require("sequelize");
 
 const Item = require("../models/item");
 const Category = require("../models/category");
+const Order = require("../models/order");
+const OrderItem = require("../models/order_item");
 const ItemVariant = require("../models/item_variant");
 
 exports.getCategories = async (req, res, next) => {
@@ -160,4 +162,29 @@ module.exports.updateItem = async (req, res, next) => {
   item.categoryId = item_category;
   await item.save();
   return res.status(200).json({ message: "Item updated", item: item });
+};
+
+
+module.exports.postOrder = async (req, res, next) => {
+  const order_items = req.body.order_items;
+  const order_total = req.body.order_total;
+  var order = await Order.create({
+    order_total: order_total,order_date: new Date(),
+  });
+  for (let i = 0; i < order_items.length; i++) {
+    const order_item = await OrderItem.create({
+      quantity: order_items[i].quantity,
+      price: order_items[i].price,
+      orderId: order.id,
+      itemId: order_items[i].itemId,
+    });
+  }
+  order = await Order.findByPk(order.id, {
+    include: [
+      {
+        model: OrderItem,
+      },
+    ],
+  });
+  return res.status(200).json({ message: "Order created", order: order });
 };

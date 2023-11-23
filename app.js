@@ -9,6 +9,8 @@ const posRoutes = require("./routes/pos");
 const Item = require("./models/item");
 const Category = require("./models/category");
 const ItemVariant = require("./models/item_variant");
+const Order = require("./models/order");
+const OrderItem = require("./models/order_item");
 
 const app = express();
 
@@ -25,7 +27,13 @@ app.use("/pos", posRoutes);
 Category.hasMany(Item,{onDelete: 'cascade', hooks: true});
 Item.belongsTo(Category, );
 
-database.sync().then(() => {
+Order.belongsToMany(Item, { through: OrderItem, onDelete: 'cascade', hooks: true });
+Item.belongsToMany(Order, { through: OrderItem, onDelete: 'SET NULL', hooks: true });
+
+Order.hasMany(OrderItem, { onDelete: 'cascade', hooks: true });
+Item.hasMany(OrderItem, { onDelete: 'SET NULL', hooks: true });
+
+database.sync({}).then(() => {
   console.log("Database synced");
   app.listen(3000);
 });
