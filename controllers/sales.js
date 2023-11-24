@@ -26,13 +26,17 @@ exports.getSalesReport = async (req, res, next) => {
                     },
                     include: [
                       {
-                        model: Item,
-                        through: OrderItem,
+                        model: OrderItem,
                         include: [
-                            {
-                              model: Category, // Assuming you have a Category model associated with the Item model
-                            },
-                          ],
+                          {
+                            model: Item,
+                            include: [
+                              {
+                                model: Category,
+                              },
+                            ],
+                          },
+                        ],
                       },
                     ],
                   })

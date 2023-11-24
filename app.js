@@ -35,6 +35,8 @@ Item.belongsToMany(Order, { through: OrderItem, onDelete: 'SET NULL', hooks: tru
 Order.hasMany(OrderItem, { onDelete: 'cascade', hooks: true });
 Item.hasMany(OrderItem, { onDelete: 'SET NULL', hooks: true });
 
+OrderItem.belongsTo(Item, {foreignKey: 'itemId', targetKey: 'id'});
+
 database.sync({}).then(() => {
   console.log("Database synced");
   app.listen(3000);
