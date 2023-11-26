@@ -15,7 +15,7 @@ const OrderItem = require("./models/order_item");
 
 const app = express();
 
-app.use(cors((origin = "http://192.168.1.21:7357"), (credentials = true)));
+app.use(cors((origin = "http://192.168.1.5:8080"), (credentials = true)));
 app.use((req, res, next) => {
   console.log("Middleware");
   console.log(req.method);
