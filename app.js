@@ -6,6 +6,7 @@ const database = require("./util/database");
 
 const posRoutes = require("./routes/pos");
 const salesRoutes = require("./routes/sales");
+const expensesRoutes = require("./routes/expenses");
 
 const Item = require("./models/item");
 const Category = require("./models/category");
@@ -29,6 +30,7 @@ app.use(bodyParser.json());
 
 app.use("/pos", posRoutes);
 app.use("/sales", salesRoutes);
+app.use("/purchases", expensesRoutes);
 
 Category.hasMany(Item,{onDelete: 'cascade', hooks: true});
 Item.belongsTo(Category, );
@@ -53,7 +55,7 @@ FrequentPurchasesItem.hasMany(PurchasedItem, { onDelete: 'SET NULL', hooks: true
 
 PurchasedItem.belongsTo(FrequentPurchasesItem, {foreignKey: 'frequentPurchasesItemId', targetKey: 'id'});
 
-database.sync({force: true}).then(() => {
+database.sync().then(() => {
   console.log("Database synced");
   app.listen(3000);
 });
