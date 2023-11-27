@@ -13,6 +13,10 @@ const ItemVariant = require("./models/item_variant");
 const Order = require("./models/order");
 const OrderItem = require("./models/order_item");
 
+const Purchase = require("./models/purchase");
+const FrequentPurchasesItem = require("./models/purchases_item");
+const PurchasedItem = require("./models/purchased_item");
+
 const app = express();
 
 app.use(cors((origin = "http://192.168.1.5:8080"), (credentials = true)));
@@ -37,7 +41,19 @@ Item.hasMany(OrderItem, { onDelete: 'SET NULL', hooks: true });
 
 OrderItem.belongsTo(Item, {foreignKey: 'itemId', targetKey: 'id'});
 
-database.sync({}).then(() => {
+//Order -> Purchase
+//OrderItem -> PurchasedItem
+//Item -> PurchasesItem(FrequentItem)
+
+Purchase.belongsToMany(FrequentPurchasesItem, { through: PurchasedItem, onDelete: 'cascade', hooks: true });
+FrequentPurchasesItem.belongsToMany(Purchase, { through: PurchasedItem, onDelete: 'SET NULL', hooks: true });
+
+Purchase.hasMany(PurchasedItem, { onDelete: 'cascade', hooks: true });
+FrequentPurchasesItem.hasMany(PurchasedItem, { onDelete: 'SET NULL', hooks: true });
+
+PurchasedItem.belongsTo(FrequentPurchasesItem, {foreignKey: 'frequentPurchasesItemId', targetKey: 'id'});
+
+database.sync({force: true}).then(() => {
   console.log("Database synced");
   app.listen(3000);
 });
