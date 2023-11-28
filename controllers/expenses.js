@@ -34,7 +34,7 @@ exports.postPurchase = async (req, res, next) => {
         freqItem.item_price = itemPrice;
         await freqItem.save();
         //dont save to frequent purchases
-        //just add to purchases
+        //just update price and add to purchases
 
         //create a purchase
         const newPurchase = await Purchase.create({
@@ -78,6 +78,20 @@ exports.postPurchase = async (req, res, next) => {
     }
     res.status(200).json({ message: "Purchase saved" });
 
+};
+
+exports.deleteFrequentPurchase = async (req, res, next) => {
+    const freqId = req.params.freqId;
+    try {
+        const freqItem = await FrequentPurchasesItem.findByPk(freqId);
+        if (!freqItem) {
+            return res.status(404).json({ message: "Item not found" });
+        }
+        await freqItem.destroy();
+        res.status(200).json({ message: "Item deleted" });
+    } catch (err) {
+        console.log(err);
+    }
 };
 
 
