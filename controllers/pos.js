@@ -183,6 +183,11 @@ module.exports.postOrder = async (req, res, next) => {
     include: [
       {
         model: OrderItem,
+        include: [
+          {
+            model: Item,
+          },
+        ],
       },
     ],
   });
