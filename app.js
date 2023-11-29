@@ -8,6 +8,8 @@ const posRoutes = require("./routes/pos");
 const salesRoutes = require("./routes/sales");
 const expensesRoutes = require("./routes/expenses");
 
+
+
 const Item = require("./models/item");
 const Category = require("./models/category");
 const ItemVariant = require("./models/item_variant");
@@ -19,6 +21,10 @@ const FrequentPurchasesItem = require("./models/purchases_item");
 const PurchasedItem = require("./models/purchased_item");
 
 const app = express();
+
+
+const timezone = 'Asia/Beirut';
+process.env.TZ = timezone
 
 app.use(cors((origin = "http://192.168.1.5:8080"), (credentials = true)));
 app.use((req, res, next) => {

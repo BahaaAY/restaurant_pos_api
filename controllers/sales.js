@@ -116,5 +116,51 @@ exports.getSalesReport = async (req, res, next) => {
             break;
 
     }
+  
 
 };
+
+exports.deleteOrderById = (req, res, next) => {
+    const orderId = req.params.orderId;
+    Order.findByPk(orderId)
+        .then((order) => {
+            if (order) {
+                return order.destroy();
+            }
+        })
+        .then((result) => {
+            res.status(200).json({ message: "Order deleted successfully" });
+        })
+        .catch((err) => console.log(err));
+};
+    //search order by id
+exports.getOrderById = (req, res, next) => {
+    const orderId = req.params.orderId;
+    Order.findByPk(orderId,
+        {
+          include: [
+            {
+          model: OrderItem,
+          include: [
+            {
+              model: Item,
+            },
+          ],
+        },
+      ]
+      }
+  
+  )
+        .then((order) => {
+          if(order)
+          {
+            res.status(200).json({ order: order });
+
+          }
+          else
+          {
+            res.status(404).json({ message: "Order not found!" });
+          }
+        })
+        .catch((err) => console.log(err));
+}
