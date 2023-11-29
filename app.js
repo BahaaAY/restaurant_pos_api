@@ -46,16 +46,20 @@ OrderItem.belongsTo(Item, {foreignKey: 'itemId', targetKey: 'id'});
 //Order -> Purchase
 //OrderItem -> PurchasedItem
 //Item -> PurchasesItem(FrequentItem)
-
-Purchase.belongsToMany(FrequentPurchasesItem, { through: PurchasedItem, onDelete: 'cascade', hooks: true });
+//Assoiciations
+Purchase.belongsToMany(FrequentPurchasesItem, { through: PurchasedItem, onDelete: 'NO ACTION', hooks: true });
 FrequentPurchasesItem.belongsToMany(Purchase, { through: PurchasedItem, onDelete: 'SET NULL', hooks: true });
 
 Purchase.hasMany(PurchasedItem, { onDelete: 'cascade', hooks: true });
 FrequentPurchasesItem.hasMany(PurchasedItem, { onDelete: 'SET NULL', hooks: true });
 
-PurchasedItem.belongsTo(FrequentPurchasesItem, {foreignKey: 'frequentPurchasesItemId', targetKey: 'id'});
+PurchasedItem.belongsTo(FrequentPurchasesItem, {foreignKey: 'frequentPurchasesItemId', targetKey: 'id', onDelete: 'SET NULL', hooks: true});
 
-database.sync().then(() => {
+
+
+database.sync(
+  // {force: true}
+  ).then(() => {
   console.log("Database synced");
   app.listen(3000);
 });
