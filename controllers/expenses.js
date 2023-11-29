@@ -165,63 +165,57 @@ exports.getPurchasesReport = async (req,res,next) =>
             const year = req.body.year;
             const startOfMonth = new Date(year, monthIndex, 1);
             const endOfMonth = new Date(year, monthIndex + 1, 1);
-            console.log("startOfMonth: ", startOfMonth);
-            console.log("endOfMonth: ", endOfMonth);
+            console.log("start: ", startOfMonth);
+            console.log("end: ", endOfMonth);
             try {
-                const orders = await Order.findAll({
+                const purchases = await Purchase.findAll({
                     where: {
-                      order_date: {
+                        purchase_date: {
                         [Op.between]: [startOfMonth, endOfMonth],
                       },
                     },
                     include: [
                       {
-                        model: OrderItem,
+                        model: PurchasedItem,
                         include: [
                           {
-                            model: Item,
-                            include: [
-                              {
-                                model: Category,
-                              },
-                            ],
+                            model: FrequentPurchasesItem,
                           },
                         ],
                       },
                     ],
                   })
-                const total = await Order.sum('order_total', {
+                const total = await Purchase.sum('purchase_total', {
                     where: {
-                      order_date: {
+                      purchase_date: {
                         [Op.between]: [startOfMonth, endOfMonth],
                       },
                     },
                   });
-
-                const days = [];
+                  const days = [];
                 //get the number of days in the month 28 or 29 or 30 or 31
                 const daysInMonth = new Date(year, monthIndex + 1, 0).getDate();
-
-                // sum sales for each day and store them as Day{date , total}
+                //loop through the days and get the total for each day
                 for (let i = 1; i <= daysInMonth; i++) {
                     const startOfDay = new Date(year, monthIndex, i);
                     const endOfDay = new Date(year, monthIndex, i + 1);
-                    var day_total = await Order.sum('order_total', {
-                        where: {
-                          order_date: {
-                            [Op.between]: [startOfDay, endOfDay],
-                          },
+                    var day_total = await Purchase.sum('purchase_total', {
+                      where: {
+                        purchase_date: {
+                          [Op.between]: [startOfDay, endOfDay],
                         },
-                      });
-                      if(day_total == null){
-                        day_total = 0;
-                      }
-                    days.push({date: (year+'-'+(monthIndex+1)+'-'+i), total: day_total});
-                }
-                res.status(200).json({ count: orders.length, total: total, orders: orders, days: days });
+                      },
+                    });
+                    if(day_total == null){
+                      day_total = 0;
+                    }
+                    days.push({date: (year+'-'+(monthIndex+1)+'-'+i), total: day_total });
+                  }
+                res.status(200).json({ count: purchases.length, total: total, purchases: purchases, days: days});
             } catch (err) {
                 console.log(err);
-            }
+                
+              }
             break;
 
     }
