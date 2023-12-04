@@ -41,11 +41,13 @@ app.use("/purchases", expensesRoutes);
 Category.hasMany(Item,{onDelete: 'cascade', hooks: true});
 Item.belongsTo(Category, );
 
-Order.belongsToMany(Item, { through: OrderItem, onDelete: 'cascade', hooks: true });
+Order.belongsToMany(Item, { through: OrderItem, onDelete: 'SET NULL', hooks: true });
 Item.belongsToMany(Order, { through: OrderItem, onDelete: 'SET NULL', hooks: true });
 
 Order.hasMany(OrderItem, { onDelete: 'cascade', hooks: true });
 Item.hasMany(OrderItem, { onDelete: 'SET NULL', hooks: true });
+
+OrderItem.belongsTo(Order, {foreignKey: 'orderId', targetKey: 'id', onDelete: 'SET NULL', hooks: true});
 
 OrderItem.belongsTo(Item, {foreignKey: 'itemId', targetKey: 'id'});
 
